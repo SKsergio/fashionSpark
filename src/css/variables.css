@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Comfortaa:wght@300..700&family=Jersey+15&family=Shadows+Into+Light&display=swap');
+:root{
+
+    /*Color de letras*/
+    --font-color-primary:#101B1F 14%;
+
+    /* Backgounds Colors */
+    --color-backgroundWhite:#f2f4f5;
+
+
+    /* colores originales */ 
+    --color-bluePrimary:#1B557B;
+    --color-greenPrimary:#A3E31B;
+    --color-orangePrimary: #EC5810;
+    --color-rosePrimary: #E40141;
+    --color-lightBluePrimary:#1AC3E2;
+
+    /* hover colors */
+    --link-hover-color: rgb(56, 235, 20);
+
+    /* variantes */
+    --color-greenVariante1: #64B01A;
+    --color-greenVariante2: #028039;
+    --color-greenVariante3: #0b5e30;
+
+    --color-orangeVariante1: #F49110;
+    
+
+    /* mezclas */
+    --color-fourth: linear-gradient(315deg, #4dc668 14%, #295c86 45%, #8e1e83 82%);
+    --background-publications: linear-gradient(315deg, #3d8d9b 11%, #4c998c 33%, #418c8f 60%, #299c76 88%);
+    --profile-content:linear-gradient(45deg, #418a99 11%, #3b8491 33%, #438296 60%, #245f69 88%);
+    --prifile-content_publication:linear-gradient(167deg, #bad2ce 11%, #69b4a8 33%, #94c9c0 60%, #becdcb 88%);
+    
+    /* letras */
+    --font-decoration: "Shadows Into Light", cursive;
+    --font--body: "Cabin", sans-serif;
+    --font--title: "Comfortaa", sans-serif;
+    --font-pth:"Jersey 15", sans-serif;
+}
