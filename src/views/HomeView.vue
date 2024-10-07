@@ -1,13 +1,8 @@
 <template>
-  <div class="home">
-    <ManiquiMujer></ManiquiMujer>
-  </div>
+  <maniqui-mujer></maniqui-mujer>
 </template>
 
-
-
 <script lang="ts" setup>
-import ManiquiMujer from '@/components/ManiquiMujer.vue';
-
+    import ManiquiMujer from '@/components/ManiquiMujer.vue';
 
 </script>
