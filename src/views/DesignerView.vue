@@ -1,8 +1,10 @@
 <template>
-    <h1>Bienvenido usuario random de fashionspark</h1>
+  <maniqui-mujer></maniqui-mujer>
 </template>
 
-<script lang="ts" setup>
+<script setup>
     import ManiquiMujer from '@/components/ManiquiMujer.vue';
-
 </script>
+
+<style scoped>
+</style>
