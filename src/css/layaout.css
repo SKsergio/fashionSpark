@@ -11,7 +11,7 @@
 #app header{
     grid-area: header;
     position: relative;
-    /* background: var( --color-bluePrimary); */
+    background: var(--color-softblue);
 }
 #app main{
     display: grid;

@@ -16,14 +16,19 @@
     --color-lightBluePrimary:#1AC3E2;
 
     /* hover colors */
-    --link-hover-color: rgb(56, 235, 20);
+    --link-hover-color: #38eb14;
 
     /* variantes */
     --color-greenVariante1: #64B01A;
     --color-greenVariante2: #028039;
     --color-greenVariante3: #0b5e30;
-
     --color-orangeVariante1: #F49110;
+
+    /* colores soft */
+    --color-softblue: #416983;
+
+    /* specific colors */
+    --color-menuActive: #1f2199;
     
 
     /* mezclas */
