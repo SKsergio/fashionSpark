@@ -223,7 +223,15 @@
        
         watch([clothesPart, clothColor], ([newPart, newColor], [oldPart, oldColor])=>{
             if (newColor != oldColor) {
-                changeColor(sueter, 'torso')
+                if (newPart == 1) {
+                    changeColor(sueter, 'torso')   
+                }else if(newPart == 2){
+                    changeColor(sueter, 'ruedo')
+                }else if(newPart == 3){
+                    changeColor(sueter, 'manga')
+                }else if(newPart == 4){
+                    changeColor(sueter, 'cuello')
+                }
             }
         })
     }
