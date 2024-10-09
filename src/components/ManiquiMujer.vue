@@ -7,7 +7,6 @@
             <button class="btn" @click="ChangeSize(1)">Talla Grande</button>
             <button class="btn" @click="ChangeSize(2)">Talla pequenia</button>
             <button class="btn" @click="ChangeSize(0)">Resetear</button>
-
         </div>
     </div>
 </template>
@@ -26,8 +25,6 @@
     let originalScales = {};
     let originalPositions = {};
     let originalRotations = {};
-
-    //contendor
 
     onMounted(()=>{
         init();
