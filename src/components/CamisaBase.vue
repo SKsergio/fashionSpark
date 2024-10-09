@@ -16,10 +16,10 @@
                 <h3>Aplicar a: </h3>
 
                 <section class="buttons_colors">
-                    <button class="btn_color">Torso</button>
-                    <button class="btn_color">Ruedo</button>
-                    <button class="btn_color">Manga</button>
-                    <button class="btn_color">Cuello</button>
+                    <button class="btn_color" @click="checkClothPart(1)">Torso</button>
+                    <button class="btn_color" @click="checkClothPart(2)">Ruedo</button>
+                    <button class="btn_color" @click="checkClothPart(3)">Manga</button>
+                    <button class="btn_color" @click="checkClothPart(4)">Cuello</button>
                 </section>
 
             </section>
@@ -33,10 +33,6 @@
     import * as THREE from 'three'
     import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
     import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-
-
-    //obtener color
-    let clothColor = ref('');
 
     //variables
     let scene, renderer, camera
@@ -90,22 +86,11 @@
             model.traverse((object) => {
                 originalSueterScale = object.scale.clone();
 
-
-                const torso = object.getObjectByName('weld_chompa_varon_3b_Material719171_0');
-                const manga = object.getObjectByName('weld_chompa_varon_3b_FABRIC_7_FRONT_719593_0');
-                const cuello = object.getObjectByName('weld_chompa_varon_3b_FABRIC_8_FRONT_720664_0');
-                const ruedo = object.getObjectByName('weld_chompa_varon_3b_FABRIC_6_FRONT_719499_0');
-
                 if (object.isMesh) {
-                    watchStateChanges(object)
+                    watchStateChanges(model) //funcion para alterar el tamanio
+                    CallColorChange(model); //funcion para editar el color
                 }
-
             });
-
-            //cambiar de color
-            // torso.material.color.set(0x202D54);
-            // torso.material.map = null; //quitar textura
-            // // manga.scale.set(0.6,1,1)
         }, undefined, (error) => {
             console.error('Error cargando el modelo:', error);
         })
@@ -180,6 +165,68 @@
     const SmallSize = (sueter)=>{
         sueter.scale.set(0.9,0.9,0.8)
     } 
+
+    //obtener color
+    let clothColor = ref('#050505');
+
+    //variable de evaluacion
+    let clothesPart = ref(0);
+
+    //chequear prenda a cambiar
+    const checkClothPart = (num)=>{
+        clothesPart.value = num;
+    }
+    
+    //cambiar de colores
+    const changeColor =(sueter, parte)=>{
+
+        // const torso = sueter.getObjectByName('weld_chompa_varon_3b_Material719171_0');
+        // const manga = sueter.getObjectByName('weld_chompa_varon_3b_FABRIC_7_FRONT_719593_0');
+        // const cuello = sueter.getObjectByName('weld_chompa_varon_3b_FABRIC_8_FRONT_720664_0');
+        // const ruedo = sueter.getObjectByName('weld_chompa_varon_3b_FABRIC_6_FRONT_719499_0');
+
+        let colorpart = '';
+        let ClothePart = '';
+
+        //evaluar cada posible respuesta
+        switch (parte) {
+            case 'torso':
+                ClothePart = sueter.getObjectByName('weld_chompa_varon_3b_Material719171_0');
+                break;
+            case 'cuello':
+                ClothePart = sueter.getObjectByName('weld_chompa_varon_3b_FABRIC_8_FRONT_720664_0');
+                break;
+            case 'ruedo':
+                ClothePart = sueter.getObjectByName('weld_chompa_varon_3b_FABRIC_6_FRONT_719499_0');
+                break;
+            case 'manga':
+                ClothePart = sueter.getObjectByName('weld_chompa_varon_3b_FABRIC_7_FRONT_719593_0');
+                break;        
+            default:
+                console.log('No se encontro la parte de la ropa');
+                break;
+        }     
+        
+        // Verificar si ClothePart no es undefined y es un Mesh
+        if (ClothePart && ClothePart.isMesh) {
+            // Reemplazar el valor del color
+            ClothePart.material.color.set(clothColor.value);
+            
+        } else {
+            console.log('Error: ClothePart no se encontró o no es un Mesh.');
+        }
+        
+    }
+
+    //funcion para llamar el cambio de color 
+    function CallColorChange (sueter){
+       
+        watch([clothesPart, clothColor], ([newPart, newColor], [oldPart, oldColor])=>{
+            if (newColor != oldColor) {
+                changeColor(sueter, 'torso')
+            }
+        })
+    }
 
 
 </script>
