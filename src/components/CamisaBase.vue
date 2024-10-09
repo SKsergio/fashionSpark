@@ -16,10 +16,11 @@
                 <h3>Aplicar a: </h3>
 
                 <section class="buttons_colors">
-                    <button class="btn_color" @click="checkClothPart(1)">Torso</button>
-                    <button class="btn_color" @click="checkClothPart(2)">Ruedo</button>
-                    <button class="btn_color" @click="checkClothPart(3)">Manga</button>
-                    <button class="btn_color" @click="checkClothPart(4)">Cuello</button>
+                    <button class="btn_color" @click="checkClothPart(1, $event)">Torso</button>
+                    <button class="btn_color" @click="checkClothPart(2, $event)">Ruedo</button>
+                    <button class="btn_color" @click="checkClothPart(3, $event)">Manga</button>
+                    <button class="btn_color" @click="checkClothPart(4, $event)">Cuello</button>
+                    <button class="btn_color" @click="checkClothPart(4, $event)">Prenda completa</button>
                 </section>
 
             </section>
@@ -36,7 +37,7 @@
 
     //variables
     let scene, renderer, camera
-    let model, skeleton, mixer, clock
+    let model
 
     //varuables para resetear
     let originalSueterScale
@@ -89,7 +90,13 @@
                 if (object.isMesh) {
                     watchStateChanges(model) //funcion para alterar el tamanio
                     CallColorChange(model); //funcion para editar el color
+
+                    object.material.map = null; //quitar textura(volvera color blanco)
+
+                    object.material.color.set(0x050505);
                 }
+                console.log(model);
+                
             });
         }, undefined, (error) => {
             console.error('Error cargando el modelo:', error);
@@ -159,7 +166,7 @@
     }
 
     const BigSize = (sueter)=>{
-        sueter.scale.set(1.3,1,1.4)
+        sueter.scale.set(1.3,1.2,1.9)
     }   
 
     const SmallSize = (sueter)=>{
@@ -173,8 +180,15 @@
     let clothesPart = ref(0);
 
     //chequear prenda a cambiar
-    const checkClothPart = (num)=>{
+    const checkClothPart = (num, e)=>{
         clothesPart.value = num;
+
+        let boton = e.srcElement;
+        console.log(boton);
+        
+        // boton.classList.toogle('active')
+        boton.classList.toggle('active');
+        
     }
     
     //cambiar de colores
@@ -277,16 +291,22 @@
     flex-wrap: wrap;
 }
 .btn_color{
-    width: 100px;
-    height: 36px;
+    width: 120px;
+    height: 39px;
     background-color: #c4771ee3;
     border-radius: 10px;
     cursor: pointer;
+    transition: all .5 ease;
 }
 .buttons_colors{
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     gap: 30px;
+}
+.active{
+    background-color: rgb(230, 194, 35);
+    transform: scale(1.1);
+    color: white;
 }
 </style>
