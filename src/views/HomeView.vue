@@ -4,6 +4,7 @@
 </template>
 
 <script lang="ts" setup>
-    import CamisaBase from '@/components/CamisaBase.vue';
+    import CamisaBase from '@/components/prendas/CamisaBase.vue';
+
 
 </script>

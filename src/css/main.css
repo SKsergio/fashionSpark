@@ -1,0 +1,15 @@
+@import url(../css/variables.css);
+
+.main__container{
+    width: 90%;
+    height: 100%;
+    margin: 0 auto;
+}
+.text_deco{
+    font-family: var( --font-decoration);
+    font-size: 46px;
+    font-weight: 700;
+}
+.info{
+    font-family: var(--font--title);
+}

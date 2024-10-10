@@ -10,6 +10,7 @@ loadFonts()
 //estilos generales
 import './css/layaout.css';
 import './css/normalice.css';
+import './css/main.css'
 
 createApp(App)
   .use(router)
