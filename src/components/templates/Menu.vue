@@ -58,19 +58,20 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    gap: 28px;
+    gap: 33px;
 }
 .nav__item{
     list-style: none;
     position: relative;
     z-index: 1;
-    font-size: 20px;
 }
 
 .nav__item a{
     font-weight: bold;
     color: var( --color-backgroundWhite);
     text-decoration: none;
+    font-family: var(--font-decoration2);
+    font-size: 23px;
 }
 
 .nav__item a.router-link-exact-active {

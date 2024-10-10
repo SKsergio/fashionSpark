@@ -11,7 +11,7 @@
   </main>
 
   <footer>
-    <h1>Holaaaaa</h1>
+    <!-- <h1>Holaaaaa</h1> -->
   </footer>
 </template>
 
