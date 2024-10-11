@@ -1,21 +1,21 @@
 <template>
     <div>
         <div class="text-overline mb-1">
-            <h1>Escoge la prenda a crear</h1>
+            <h1>Escoge la categoria de la prenda</h1>
         </div>
         <div class="radio-inputs">
             <label class="radio">
-                <input type="radio" name="radio" checked="">
+                <input type="radio" name="radio" checked="" v-model="categoria" value="Deportivo">
                 <span class="name">Deportivo</span>
             </label>
 
             <label class="radio">
-                <input type="radio" name="radio">
+                <input type="radio" name="radio" v-model="categoria" value="Casual">
                 <span class="name">Casual</span>
             </label>
 
             <label class="radio">
-                <input type="radio" name="radio">
+                <input type="radio" name="radio" v-model="categoria" value="Formal">
                 <span class="name">Formal</span>
             </label>
         </div>
@@ -23,6 +23,26 @@
 </template>
 
 <script setup>
+    import { ref, defineEmits, watch } from 'vue';
+
+    //EMITS
+    const emit = defineEmits(["sendCategory"])
+
+    //valor a enviar
+    let categoria = ref('');
+
+    //chequeando cualquier cambio
+    watch(categoria, (NewVal, OldVal)=>{
+        if (NewVal != OldVal) {
+            HandleClick(NewVal)
+        }
+    })
+
+    //funcion de encvio
+    const HandleClick = (value)=>{
+        emit("sendCategory",value,'Categoria')
+    }
+
 </script>
 
 <style scoped>

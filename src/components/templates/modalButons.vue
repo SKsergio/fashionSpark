@@ -5,8 +5,8 @@
             <v-card-item>
                 <h1 class="text-overline">Escoge la prenda a crear</h1>
                 <section class="body_card">
-                    <clothe-category></clothe-category>
-                    <gender-input></gender-input>
+                    <clothe-category @sendCategory="setDataManiqui"></clothe-category>
+                    <gender-input @SendGender="setDataManiqui"></gender-input>
                 </section>
             </v-card-item>
 
@@ -14,7 +14,7 @@
 
             <v-card-actions>
                 <v-btn variant="elevated" color="red" @click="closedBoton">Cancelar</v-btn>
-                <v-btn color="indigo" variant="elevated">Hecho</v-btn>
+                <v-btn color="indigo" variant="elevated" @click="save">Hecho</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -24,6 +24,17 @@
 import { ref, watch, defineProps,defineEmits} from 'vue';
 import ClotheCategory from '../utils/ClotheCategory.vue';
 import GenderInput from '../utils/GenderInput.vue';
+
+//variable del modal
+const dialog = ref(false);
+// Comunicación del hijo al padre
+const emits = defineEmits(['closed']);
+
+//DATOS QUE LUEGO SE GUARDARAN EN LA BD
+let TipoManiqui = ref({
+    Category: '',
+    Gender: ''
+});
 
 //comunicacion del padre al hijo
 const props = defineProps({
@@ -37,11 +48,6 @@ const props = defineProps({
   }
 });
 
-// Comunicación del hijo al padre
-const emits = defineEmits(['closed']);
-
-const dialog = ref(false);
-
 // Función para cerrar el diálogo
 const closedBoton = () => {
   dialog.value = false;  
@@ -51,6 +57,20 @@ const closedBoton = () => {
 watch(() => props.enterdialog, (newVal) => {
     dialog.value = newVal;
 });
+
+//funcion para recibir los envios del hijo
+const setDataManiqui =(data, tipo)=>{
+    if (tipo === 'Categoria') {
+        TipoManiqui.value.Category = data
+    }else if(tipo === 'Genero'){
+        TipoManiqui.value.Gender = data
+    }
+}
+
+const save = ()=>{
+    console.log(TipoManiqui.value.Category);
+    console.log(TipoManiqui.value.Gender);
+}
 </script>
 
 <style scoped>

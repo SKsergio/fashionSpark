@@ -5,20 +5,40 @@
         </div>
         <div class="radio-inputs">
             <label class="radio">
-                <input type="radio" name="radioGender" checked="">
+                <input type="radio" name="radioGender" checked="" value="F" v-model="genero">
                 <span class="gender">Femenino</span>
             </label>
 
             <label class="radio">
-                <input type="radio" name="radioGender">
+                <input type="radio" name="radioGender" value="M" v-model="genero">
                 <span class="gender">Masculino</span>
             </label>
-
         </div>
     </div>
 </template>
 
 <script setup>
+    import { ref,defineEmits,watch } from 'vue';
+
+    //EMITS
+    const emit = defineEmits(["SendGender"])
+    let genero = ref('')
+
+    //chqueando los cambio
+    watch(genero, (NewVal, OldVal)=>{
+        if (NewVal != OldVal) {
+            HandleClick(NewVal)
+        }
+    })
+
+    //funcion de ennvio
+    const HandleClick = (value)=>{
+        emit("SendGender", value, 'Genero')
+    }
+
+
+
+
 </script>
 
 <style scoped>
