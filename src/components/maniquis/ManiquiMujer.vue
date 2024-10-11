@@ -30,7 +30,6 @@
         init();
 
         animate();
-
     })
 
     const init = ()=>{
@@ -233,13 +232,24 @@
         });
     };
 
+    
+
+</script>
+
+<script>
+    // Función para agregar objetos a la escena desde los componentes hijos
+    export function addToScene(object) {
+        scene.add(object);
+    }
 </script>
 
 <style scoped>
     .container{
         display: flex;
         flex-direction: row-reverse;
+        border-radius: 20px 0 0 20px;
         background-color: rgb(34, 207, 126);
+        padding: 10px
     }
     .cont{
         width: 50%;

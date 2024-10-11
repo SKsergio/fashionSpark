@@ -5,7 +5,7 @@
         </div>
         <div class="radio-inputs">
             <label class="radio">
-                <input type="radio" name="radio" checked="" v-model="categoria" value="Deportivo">
+                <input type="radio" name="radio"v-model="categoria" value="Deportivo">
                 <span class="name">Deportivo</span>
             </label>
 

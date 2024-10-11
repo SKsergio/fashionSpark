@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import PerfilView from '@/views/PerfilView.vue'
 import DesignerView from '@/views/DesignerView.vue'
 import PlanesView from '@/views/PlanesView.vue'
+import CreateDesign from '@/components/actions/CreateDesign.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,10 +19,15 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/designer',
     name: 'designer',
-    component:DesignerView
+    component:DesignerView,
   },
   {
-    path: '/planesView',
+    path: '/designer/create',
+    name: 'designerCreate',
+    component: CreateDesign // Componente para editar
+  },
+  {
+    path: '/planes',
     name: 'planes',
     component:PlanesView
   }

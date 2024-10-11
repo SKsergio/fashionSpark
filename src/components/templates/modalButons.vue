@@ -21,20 +21,20 @@
 </template>
 
 <script setup>
-import { ref, watch, defineProps,defineEmits} from 'vue';
+import { ref, watch, defineProps,defineEmits, computed} from 'vue';
 import ClotheCategory from '../utils/ClotheCategory.vue';
 import GenderInput from '../utils/GenderInput.vue';
+import { useStore } from 'vuex';
+import router from '@/router';
+
+//estados 
+const store = useStore()
 
 //variable del modal
 const dialog = ref(false);
 // Comunicación del hijo al padre
 const emits = defineEmits(['closed']);
 
-//DATOS QUE LUEGO SE GUARDARAN EN LA BD
-let TipoManiqui = ref({
-    Category: '',
-    Gender: ''
-});
 
 //comunicacion del padre al hijo
 const props = defineProps({
@@ -59,17 +59,26 @@ watch(() => props.enterdialog, (newVal) => {
 });
 
 //funcion para recibir los envios del hijo
+//DATOS QUE LUEGO SE GUARDARAN EN LA BD
 const setDataManiqui =(data, tipo)=>{
     if (tipo === 'Categoria') {
-        TipoManiqui.value.Category = data
+        store.dispatch('ActionCurrentDesignCategory',data) 
     }else if(tipo === 'Genero'){
-        TipoManiqui.value.Gender = data
+        store.dispatch('ActionCurrentDesignGender', data)
     }
 }
 
 const save = ()=>{
-    console.log(TipoManiqui.value.Category);
-    console.log(TipoManiqui.value.Gender);
+    const currentDesign = computed(() => store.getters.getCurrentDesign);
+    const genero = computed(() => currentDesign.value.Genero);
+    const categoria = computed(() => currentDesign.value.Category);
+
+
+    if (genero.value && categoria.value) {
+        router.push({ name: 'designerCreate' })   
+    }else{
+        alert('Los campos son requeridos')
+    }
 }
 </script>
 
