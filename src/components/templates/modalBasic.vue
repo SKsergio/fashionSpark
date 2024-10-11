@@ -23,21 +23,18 @@
     let dialog = ref(true);
 
 
-    // const props = defineProps({
-    //     enterdialog:{
-    //         required:true
-    //     },
-    //     texto:{
-    //         type:String,
-    //         required: true
-    //     },
-    //     title:{
-    //         required:false
-    //     }
-    // })
-
-
-
+    const props = defineProps({
+        enterdialog:{
+            required:true
+        },
+        texto:{
+            type:String,
+            required: true
+        },
+        title:{
+            required:false
+        }
+    })
 </script>
 
 <style scoped>

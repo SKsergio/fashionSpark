@@ -8,7 +8,7 @@
                 </section>
                 <section class="next_ways">
                     <v-btn prepend-icon="mdi-pencil" class="btns mydesigns">Mis diseños</v-btn>
-                    <v-btn prepend-icon="mdi-wizard-hat" class="btns createDesign" @click="dialog = true">Crear nuevo diseño</v-btn>
+                    <v-btn prepend-icon="mdi-wizard-hat" class="btns createDesign" @click="create">Crear nuevo diseño</v-btn>
                     <v-btn prepend-icon="mdi-format-paint" class="btns tempaltesDesign">Plantillas</v-btn>
                 </section>
             </article>
@@ -18,16 +18,25 @@
             <h1>Creamos tus propios configuradores 3D personalizados</h1>
             <h1>Los consumidores pueden personalizar facil y rapidamente sus productos.</h1>
         </section>
-
-        <modalBasic></modalBasic>
+        <modalButons :enterdialog="opened" @closed="closedModal"></modalButons>
     </div>
 
 </template>
 
 <script setup>
-//   import ManiquiMujer from '@/components/maniquis/ManiquiMujer.vue';
-    import modalBasic from '@/components/templates/modalBasic.vue';
+    import { ref} from 'vue';
+    import modalButons from '@/components/templates/modalButons.vue';
 
+    let opened = ref(false);
+
+    const create = ()=>{
+        opened.value = true;
+    }
+   
+    // Función para manejar el cierre del modal
+    const closedModal = (value) => {
+        opened.value = value;  // Restablecer el estado de 'opened'
+    };
 </script>
 
 <style scoped>
