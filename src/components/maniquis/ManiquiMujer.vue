@@ -7,7 +7,9 @@
             <button class="btn" @click="ChangeSize(1)">Talla Grande</button>
             <button class="btn" @click="ChangeSize(2)">Talla pequenia</button>
             <button class="btn" @click="ChangeSize(0)">Resetear</button>
+            <SueterBase :scene="scene"></SueterBase>
         </div>
+
     </div>
 </template>
 
@@ -16,6 +18,9 @@
     import * as THREE from 'three'
     import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
     import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+    import SueterBase from '../prendas/SueterBase.vue';
+
 
     //variables
     let scene, renderer, camera
@@ -28,7 +33,6 @@
 
     onMounted(()=>{
         init();
-
         animate();
     })
 
