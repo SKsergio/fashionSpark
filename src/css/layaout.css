@@ -1,6 +1,6 @@
 @import url(./variables.css);
 
-#app{
+.protected-view{
     display: grid;
     gap: 40px;
     background: var(--color-backgroundWhite);
@@ -8,15 +8,15 @@
     "main main main"
     "footer footer footer";
 }
-#app header{
+.protected-view header{
     grid-area: header;
     position: relative;
     background: var(--second-mixer);
 }
-#app main{
+.protected-view main{
     display: grid;
     grid-area: main;
 }
-#app footer{
+.protected-view footer{
     grid-area: footer;
 }
