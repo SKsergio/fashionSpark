@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="app-container">
   
     <LoginView v-if="!isAuthenticated" class="login-view" />
@@ -49,5 +49,48 @@ import LoginView from './views/LoginView.vue';
 .main__container {
   flex: 1; /* Asegura que el contenedor principal ocupe el espacio restante */
   padding: 1rem;
+}
+</style> -->
+
+<template>
+  <div class="app-container">
+    <!-- Componente principal donde el router maneja todas las vistas -->
+    <div class="protected-view">
+    <header v-if="isAuthenticated" >
+      <Menu />
+    </header>
+    
+    <main>
+      <div class="main__container">
+        <router-view />
+      </div>
+    </main>
+
+    <footer v-if="isAuthenticated">
+    </footer>
+  </div>
+  </div>
+</template>
+
+<script setup>
+import { isAuthenticated } from '@/auth';
+import Menu from './components/templates/Menu.vue';
+</script>
+
+<style scoped>
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main__container {
+  flex: 1;
+  padding: 1rem;
+}
+.protected-view {
+  flex: 1; /* Asegura que la vista protegida ocupe el espacio disponible */
+  display: flex;
+  flex-direction: column; /* Organiza los elementos verticalmente */
 }
 </style>

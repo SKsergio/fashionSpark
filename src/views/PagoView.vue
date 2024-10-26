@@ -1,6 +1,8 @@
 <template>
     <div class="payment-container">
         <h1 class="title">Formulario de Pago</h1>
+        <p>Plan seleccionado: {{ planId }}</p>
+        <p>Monto a pagar: ${{ amount }}</p>
 
         <form @submit.prevent="handlePayment" class="payment-form">
             <div class="form-group" ref="cardElement" id="card-element"></div>
@@ -14,6 +16,7 @@
                     v-model="cardName"
                     placeholder="Nombre del titular"
                     required
+                    class="input-field"
                 />
             </div>
 
@@ -42,12 +45,34 @@ let card;
 
 // Captura los parámetros de la URL
 const planId = route.query.planId;
-const amount = route.query.amount; // Asegúrate de que amount sea un número en el backend
+const amount = route.query.amount; 
+const nombreUsuario = route.query.nombreUsuario; // Recibir el nombre de usuario
+const emailUsuario = route.query.emailUsuario; // Recibir el correo electrónico
+const contrasenaUsuario = route.query.contrasenaUsuario;
 
 onMounted(() => {
-    stripe = Stripe('pk_test_51QDLbaIH3ZfLT1PJm54EH5xBxclr0TngOuV8VyGp7TkvQ3g6pPI68fCObLbqsnLfnAWNvPfqLI6rFHmSSs4u39QM005kZEyD9h');
+    stripe = Stripe('pk_test_51QDLbaIH3ZfLT1PJm54EH5xBxclr0TngOuV8VyGp7TkvQ3g6pPI68fCObLbqsnLfnAWNvPfqLI6rFHmSSs4u39QM005kZEyD9h'); // Cambiar a tu clave pública de Stripe
     const elements = stripe.elements();
-    card = elements.create('card');
+
+    card = elements.create('card', {
+        style: {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                lineHeight: '24px',
+                padding: '10px',
+                border: '1px solid #ccc',
+                borderRadius: '5px',
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a',
+            },
+        },
+    });
+
     card.mount('#card-element');
 });
 
@@ -55,103 +80,126 @@ const handlePayment = async () => {
     errorMessage.value = '';
     successMessage.value = '';
 
-    const { token, error } = await stripe.createToken(card);
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: card,
+        billing_details: {
+            name: cardName.value,
+        },
+    });
 
     if (error) {
         errorMessage.value = error.message;
-        return;
-    }
-
-    try {
-        const response = await fetch('http://127.0.0.1:8000/api/procesarPago', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                amount: parseInt(amount, 10), // Asegúrate de enviar el valor correcto
-                stripeToken: token.id,
-                plan_id: planId, // Usa el planId capturado
-                pago_id: 1,
-            }),
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            await Swal.fire({
-                title: 'Pago Realizado',
-                text: 'Suscripción completada con éxito.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar',
+    } else {
+        // Aquí deberías realizar la lógica para procesar el pago en tu servidor
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/pagos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    planId,
+                    amount,
+                    paymentMethodId: paymentMethod.id,
+                    nombreUsuario, // Incluir el nombre de usuario
+                    emailUsuario, // Incluir el correo electrónico
+                    contrasenaUsuario, // Incluir la contraseña del usuario
+                }),
             });
-            router.push('/');
-        } else {
-            errorMessage.value = 'El pago no se pudo procesar.';
+
+            if (!response.ok) {
+                throw new Error('Error al procesar el pago');
+            }
+
+            successMessage.value = 'Pago realizado con éxito';
+
+            // Redirigir después de un pago exitoso
+            Swal.fire({
+                title: 'Éxito',
+                text: 'Tu pago ha sido procesado correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Continuar',
+            }).then(() => {
+                router.push({ name: 'login' }); // Cambia 'login' a la ruta deseada
+            });
+        } catch (error) {
+            errorMessage.value = error.message;
         }
-    } catch (error) {
-        errorMessage.value = 'Error al procesar el pago: ' + error.message;
     }
-}
+};
 </script>
 
 <style scoped>
 .payment-container {
-    max-width: 400px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background-color: #e9f7ef; /* Light green background */
     border-radius: 10px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    color: #2c3e50; /* Darker text color for contrast */
 }
 
 .title {
-    text-align: center;
+    font-size: 2rem;
+    color: #27ae60; /* Green color for title */
     margin-bottom: 20px;
 }
 
+.payment-form {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
 .form-group {
-    margin-bottom: 15px;
+    margin: 15px 0;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input {
+.input-field {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+    border-color: #27ae60; /* Light green border on focus */
+    outline: none;
 }
 
 .submit-button {
     width: 100%;
     padding: 10px;
-    background-color: #28a745; /* Color verde */
-    color: white;
+    background-color: #27ae60; /* Green button */
+    color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
 .submit-button:hover {
-    background-color: #218838; /* Color verde más oscuro al pasar el cursor */
+    background-color: #219150; /* Darker green on hover */
 }
 
 .error {
-    color: red;
-    text-align: center;
+    color: #e74c3c; /* Red for error messages */
+    font-weight: bold;
     margin-top: 10px;
 }
 
 .success {
-    color: green;
-    text-align: center;
+    color: #2ecc71; /* Light green for success messages */
+    font-weight: bold;
     margin-top: 10px;
 }
 </style>

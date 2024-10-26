@@ -1,10 +1,8 @@
 <template>
     <h1>Bienvenido usuario random de fashionspark</h1>
-    <CamisaBase></CamisaBase>
 </template>
 
 <script lang="ts" setup>
-    import CamisaBase from '@/components/prendas/CamisaBase.vue';
 
 
 </script>

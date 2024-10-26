@@ -71,12 +71,15 @@ const getPlanClass = (id) => {
     padding: 20px;
     font-family: Arial, sans-serif;
     color: #fff;
+    background: linear-gradient(to bottom right, #c8e6c9, #a5d6a7);
+    min-height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la pantalla */
 }
 
 .title {
     color: #2e2e2e;
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .plan-cards {
@@ -94,6 +97,12 @@ const getPlanClass = (id) => {
     border-radius: 10px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
     text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Efecto de animación */
+}
+
+.plan-card:hover {
+    transform: translateY(-5px); /* Levanta la tarjeta al pasar el cursor */
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .price {
@@ -115,7 +124,7 @@ const getPlanClass = (id) => {
     border-radius: 5px;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .basic {
@@ -136,6 +145,7 @@ const getPlanClass = (id) => {
 
 .basic .subscribe-button:hover {
     background-color: #5ca73e;
+    transform: scale(1.05); /* Aumenta ligeramente el botón */
 }
 
 .intermediate .subscribe-button {
@@ -144,6 +154,7 @@ const getPlanClass = (id) => {
 
 .intermediate .subscribe-button:hover {
     background-color: #d1a200;
+    transform: scale(1.05); /* Aumenta ligeramente el botón */
 }
 
 .premium .subscribe-button {
@@ -152,6 +163,7 @@ const getPlanClass = (id) => {
 
 .premium .subscribe-button:hover {
     background-color: #d15353;
+    transform: scale(1.05); /* Aumenta ligeramente el botón */
 }
 
 .loading {
