@@ -11,65 +11,54 @@
                 <h2>{{ plan.Nombre_Plan }}</h2>
                 <p class="price">${{ plan.Precio_Plan }} / mes</p>
                 <p class="description">{{ plan.Descripcion_Plan }}</p>
-                <button @click="subscribeToPlan(plan)" class="subscribe-button">Suscribirse</button>
+                <button @click="redirectToPayment(plan.id, plan.Precio_Plan)" class="subscribe-button">Suscribirse</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
-const plans = ref([]); 
-const loading = ref(true); 
-const error = ref(''); 
+const router = useRouter()
+const plans = ref([]) 
+const loading = ref(true) 
+const error = ref('') 
 
 const fetchPlans = async () => {
-    loading.value = true;
+    loading.value = true
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/planes');
+        const response = await fetch('http://127.0.0.1:8000/api/planes')
         if (!response.ok) {
-            throw new Error('Error al cargar los planes');
+            throw new Error('Error al cargar los planes')
         }
-        const data = await response.json();
-        plans.value = data; 
+        const data = await response.json()
+        plans.value = data 
     } catch (err) {
-        error.value = err.message;
+        error.value = err.message
     } finally {
-        loading.value = false;
+        loading.value = false
     }
 }
 
 onMounted(() => {
-    fetchPlans();
-});
+    fetchPlans()
+})
 
-function subscribeToPlan(plan) {
-    const nuevoUsuario = JSON.parse(localStorage.getItem('nuevoUsuario'));
-    
-    // Aquí podrías enviar la información del usuario y del plan al servidor si es necesario
-
-    // Redirigir a la vista de pago con el ID del plan y el monto
+function redirectToPayment(planId, amount) {
     router.push({
         path: '/pago',
-        query: { 
-            planId: plan.id, 
-            amount: plan.Precio_Plan,
-            nombreUsuario: nuevoUsuario.Nombre_Usuario, // También puedes pasar el nombre de usuario si es necesario
-            emailUsuario: nuevoUsuario.Email_Usuario, // Y el correo electrónico si es necesario
-            contrasenaUsuario: nuevoUsuario.Contrasena_Usuario
-        }
-    });
+        query: { planId, amount }
+    })
 }
 
 const getPlanClass = (id) => {
     switch (id) {
-        case 1: return 'basic';
-        case 2: return 'intermediate';
-        case 3: return 'premium';
-        default: return '';
+        case 1: return 'basic'
+        case 2: return 'intermediate'
+        case 3: return 'premium'
+        default: return ''
     }
 }
 </script>
@@ -82,29 +71,38 @@ const getPlanClass = (id) => {
     padding: 20px;
     font-family: Arial, sans-serif;
     color: #fff;
+    background: linear-gradient(to bottom right, #c8e6c9, #a5d6a7);
+    min-height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la pantalla */
 }
 
 .title {
     color: #2e2e2e;
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .plan-cards {
     display: flex;
-    flex-direction: row; 
-    flex-wrap: wrap; 
-    justify-content: center; 
+    flex-direction: row; /* Cambiado a 'row' para alinear horizontalmente */
+    flex-wrap: wrap; /* Permite que las tarjetas se ajusten a múltiples líneas */
+    justify-content: center; /* Centra las tarjetas en el contenedor */
 }
 
 .plan-card {
     width: 80%;
     max-width: 300px;
     padding: 20px;
-    margin: 15px; 
+    margin: 15px; /* Mantén un margen alrededor de cada tarjeta */
     border-radius: 10px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
     text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Efecto de animación */
+}
+
+.plan-card:hover {
+    transform: translateY(-5px); /* Levanta la tarjeta al pasar el cursor */
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .price {
@@ -126,7 +124,7 @@ const getPlanClass = (id) => {
     border-radius: 5px;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .basic {
@@ -147,6 +145,7 @@ const getPlanClass = (id) => {
 
 .basic .subscribe-button:hover {
     background-color: #5ca73e;
+    transform: scale(1.05); /* Aumenta ligeramente el botón */
 }
 
 .intermediate .subscribe-button {
@@ -155,6 +154,7 @@ const getPlanClass = (id) => {
 
 .intermediate .subscribe-button:hover {
     background-color: #d1a200;
+    transform: scale(1.05); /* Aumenta ligeramente el botón */
 }
 
 .premium .subscribe-button {
@@ -163,6 +163,7 @@ const getPlanClass = (id) => {
 
 .premium .subscribe-button:hover {
     background-color: #d15353;
+    transform: scale(1.05); /* Aumenta ligeramente el botón */
 }
 
 .loading {

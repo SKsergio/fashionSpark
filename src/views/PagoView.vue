@@ -16,6 +16,7 @@
                     v-model="cardName"
                     placeholder="Nombre del titular"
                     required
+                    class="input-field"
                 />
             </div>
 
@@ -31,26 +32,23 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex'; // Importa useStore para acceder a Vuex
+import { useRouter, useRoute } from 'vue-router';
 import Swal from 'sweetalert2';
 
 const router = useRouter();
-const store = useStore(); // Crea una instancia de Vuex
+const route = useRoute();
 const cardName = ref('');
 const errorMessage = ref('');
 const successMessage = ref('');
 let stripe;
 let card;
 
-// Captura los datos del usuario desde Vuex
-const nombreUsuario = store.state.nombreUsuario; // Cambia esto según tu estado Vuex
-const emailUsuario = store.state.emailUsuario; // Cambia esto según tu estado Vuex
-const contrasenaUsuario = store.state.contrasenaUsuario; // Cambia esto según tu estado Vuex
-
-// Captura el planId y el monto desde el estado o de donde lo estés obteniendo
-const planId = store.state.planId; // Asegúrate de que este dato esté en Vuex
-const amount = store.state.amount; // Asegúrate de que este dato esté en Vuex
+// Captura los parámetros de la URL
+const planId = route.query.planId;
+const amount = route.query.amount; 
+const nombreUsuario = route.query.nombreUsuario; // Recibir el nombre de usuario
+const emailUsuario = route.query.emailUsuario; // Recibir el correo electrónico
+const contrasenaUsuario = route.query.contrasenaUsuario;
 
 onMounted(() => {
     stripe = Stripe('pk_test_51QDLbaIH3ZfLT1PJm54EH5xBxclr0TngOuV8VyGp7TkvQ3g6pPI68fCObLbqsnLfnAWNvPfqLI6rFHmSSs4u39QM005kZEyD9h'); // Cambiar a tu clave pública de Stripe
@@ -65,6 +63,8 @@ onMounted(() => {
                 fontSize: '16px',
                 lineHeight: '24px',
                 padding: '10px',
+                border: '1px solid #ccc',
+                borderRadius: '5px',
             },
             invalid: {
                 color: '#fa755a',
@@ -91,8 +91,8 @@ const handlePayment = async () => {
     if (error) {
         errorMessage.value = error.message;
     } else {
+        // Aquí deberías realizar la lógica para procesar el pago en tu servidor
         try {
-            // Procesar el pago en el backend
             const response = await fetch('http://127.0.0.1:8000/api/pagos', {
                 method: 'POST',
                 headers: {
@@ -102,9 +102,9 @@ const handlePayment = async () => {
                     planId,
                     amount,
                     paymentMethodId: paymentMethod.id,
-                    nombreUsuario,
-                    emailUsuario,
-                    contrasenaUsuario,
+                    nombreUsuario, // Incluir el nombre de usuario
+                    emailUsuario, // Incluir el correo electrónico
+                    contrasenaUsuario, // Incluir la contraseña del usuario
                 }),
             });
 
@@ -112,35 +112,16 @@ const handlePayment = async () => {
                 throw new Error('Error al procesar el pago');
             }
 
-            // Registrar al usuario si el pago fue exitoso
-            const registerResponse = await fetch('http://127.0.0.1:8000/api/usuarios', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    Nombre_Usuario: nombreUsuario,
-                    Email_Usuario: emailUsuario,
-                    Contrasena_Usuario: contrasenaUsuario,
-                    Plan_Id: planId,
-                    Rol_Id: 1, // Rol predeterminado
-                }),
-            });
+            successMessage.value = 'Pago realizado con éxito';
 
-            if (!registerResponse.ok) {
-                throw new Error('Error al registrar el usuario');
-            }
-
-            successMessage.value = 'Pago y registro exitoso';
-
-            // Mostrar mensaje de éxito y redirigir al usuario
+            // Redirigir después de un pago exitoso
             Swal.fire({
                 title: 'Éxito',
-                text: 'Tu pago ha sido procesado y te has registrado correctamente.',
+                text: 'Tu pago ha sido procesado correctamente.',
                 icon: 'success',
                 confirmButtonText: 'Continuar',
             }).then(() => {
-                router.push({ name: 'login' }); // Redirigir a la página de login o la que prefieras
+                router.push({ name: 'login' }); // Cambia 'login' a la ruta deseada
             });
         } catch (error) {
             errorMessage.value = error.message;
@@ -154,43 +135,71 @@ const handlePayment = async () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 40px;
+    background-color: #e9f7ef; /* Light green background */
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    color: #2c3e50; /* Darker text color for contrast */
 }
 
 .title {
-    font-size: 1.8rem;
-    color: #2e2e2e;
+    font-size: 2rem;
+    color: #27ae60; /* Green color for title */
+    margin-bottom: 20px;
 }
 
 .payment-form {
     width: 100%;
     max-width: 400px;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .form-group {
-    margin: 10px 0;
+    margin: 15px 0;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+    border-color: #27ae60; /* Light green border on focus */
+    outline: none;
 }
 
 .submit-button {
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #27ae60; /* Green button */
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
 .submit-button:hover {
-    background-color: #0056b3;
+    background-color: #219150; /* Darker green on hover */
 }
 
 .error {
-    color: red;
+    color: #e74c3c; /* Red for error messages */
+    font-weight: bold;
+    margin-top: 10px;
 }
 
 .success {
-    color: green;
+    color: #2ecc71; /* Light green for success messages */
+    font-weight: bold;
+    margin-top: 10px;
 }
 </style>
