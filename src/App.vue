@@ -1,9 +1,8 @@
 <template>
   <div class="app-container">
-    <!-- Muestra LoginView si el usuario no ha iniciado sesión -->
+  
     <LoginView v-if="!isAuthenticated" class="login-view" />
 
-    <!-- Plantilla principal para vistas protegidas -->
     <div v-else class="protected-view">
       <header>
         <Menu />

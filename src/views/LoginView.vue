@@ -67,11 +67,11 @@ const router = useRouter();
 
 const fetchUsers = async () => {
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/usuarios'); // Reemplaza con la URL de tu endpoint
+    const response = await fetch('http://127.0.0.1:8000/api/usuarios'); 
     if (!response.ok) {
       throw new Error('Error al obtener usuarios');
     }
-    users.value = await response.json(); // Asumiendo que la API devuelve un array de usuarios
+    users.value = await response.json(); 
   } catch (error) {
     console.error('Error fetching users:', error);
   }
@@ -84,8 +84,8 @@ const handleLogin = () => {
 
   if (user) {
     console.log('Login successful');
-    login(); // Marca el estado como autenticado
-    router.push('/'); // Redirige a la página principal
+    login(); 
+    router.push('/'); 
   } else {
     console.log('Invalid credentials');
     alert('Usuario o contraseña incorrecta');
@@ -97,7 +97,6 @@ const goToRegister = () => {
   router.push({ name: 'registrar' });
 };
 
-// Cargar usuarios al montar el componente
 onMounted(fetchUsers);
 </script>
 
