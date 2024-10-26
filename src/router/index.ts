@@ -44,14 +44,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/planes',
     name: 'planes',
-    component: PlanesView,
-    meta: { requiresAuth: true }
+    component: PlanesView
   },
   {
     path: '/pago',
     name: 'pago',
     component: PagoView,
-    meta: { requiresAuth: true }
   },
   {
     path: '/registrar',
@@ -68,10 +66,13 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isAuthenticated.value) {
     next({ name: 'login' });
+  } else if (to.name === 'login' && isAuthenticated.value) {
+    next({ name: 'home' }); // Redirige a home si está autenticado y está en login
   } else {
     next();
   }
 });
+
 
 
 export default router

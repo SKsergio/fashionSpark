@@ -11,54 +11,65 @@
                 <h2>{{ plan.Nombre_Plan }}</h2>
                 <p class="price">${{ plan.Precio_Plan }} / mes</p>
                 <p class="description">{{ plan.Descripcion_Plan }}</p>
-                <button @click="redirectToPayment(plan.id, plan.Precio_Plan)" class="subscribe-button">Suscribirse</button>
+                <button @click="subscribeToPlan(plan)" class="subscribe-button">Suscribirse</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-const router = useRouter()
-const plans = ref([]) 
-const loading = ref(true) 
-const error = ref('') 
+const router = useRouter();
+const plans = ref([]); 
+const loading = ref(true); 
+const error = ref(''); 
 
 const fetchPlans = async () => {
-    loading.value = true
+    loading.value = true;
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/planes')
+        const response = await fetch('http://127.0.0.1:8000/api/planes');
         if (!response.ok) {
-            throw new Error('Error al cargar los planes')
+            throw new Error('Error al cargar los planes');
         }
-        const data = await response.json()
-        plans.value = data 
+        const data = await response.json();
+        plans.value = data; 
     } catch (err) {
-        error.value = err.message
+        error.value = err.message;
     } finally {
-        loading.value = false
+        loading.value = false;
     }
 }
 
 onMounted(() => {
-    fetchPlans()
-})
+    fetchPlans();
+});
 
-function redirectToPayment(planId, amount) {
+function subscribeToPlan(plan) {
+    const nuevoUsuario = JSON.parse(localStorage.getItem('nuevoUsuario'));
+    
+    // Aquí podrías enviar la información del usuario y del plan al servidor si es necesario
+
+    // Redirigir a la vista de pago con el ID del plan y el monto
     router.push({
         path: '/pago',
-        query: { planId, amount }
-    })
+        query: { 
+            planId: plan.id, 
+            amount: plan.Precio_Plan,
+            nombreUsuario: nuevoUsuario.Nombre_Usuario, // También puedes pasar el nombre de usuario si es necesario
+            emailUsuario: nuevoUsuario.Email_Usuario, // Y el correo electrónico si es necesario
+            contrasenaUsuario: nuevoUsuario.Contrasena_Usuario
+        }
+    });
 }
 
 const getPlanClass = (id) => {
     switch (id) {
-        case 1: return 'basic'
-        case 2: return 'intermediate'
-        case 3: return 'premium'
-        default: return ''
+        case 1: return 'basic';
+        case 2: return 'intermediate';
+        case 3: return 'premium';
+        default: return '';
     }
 }
 </script>
@@ -81,16 +92,16 @@ const getPlanClass = (id) => {
 
 .plan-cards {
     display: flex;
-    flex-direction: row; /* Cambiado a 'row' para alinear horizontalmente */
-    flex-wrap: wrap; /* Permite que las tarjetas se ajusten a múltiples líneas */
-    justify-content: center; /* Centra las tarjetas en el contenedor */
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    justify-content: center; 
 }
 
 .plan-card {
     width: 80%;
     max-width: 300px;
     padding: 20px;
-    margin: 15px; /* Mantén un margen alrededor de cada tarjeta */
+    margin: 15px; 
     border-radius: 10px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
     text-align: center;

@@ -55,49 +55,55 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import logo from '@/img/neto.jpeg';
 import { login } from '@/auth';
 
+
 const email = ref('');
 const password = ref('');
-const users = ref([]);
 const router = useRouter();
 
-const fetchUsers = async () => {
+const handleLogin = async () => {
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/usuarios'); 
+    console.log('Intentando iniciar sesión con:', { email: email.value, password: password.value });
+
+    const response = await fetch('http://127.0.0.1:8000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Email_Usuario: email.value,
+        Contrasena_Usuario: password.value,
+      }),
+    });
+
     if (!response.ok) {
-      throw new Error('Error al obtener usuarios');
+      throw new Error('Credenciales inválidas');
     }
-    users.value = await response.json(); 
-  } catch (error) {
-    console.error('Error fetching users:', error);
-  }
-};
 
-const handleLogin = () => {
-  const user = users.value.find(
-    (user) => user.Email_Usuario === email.value && user.Contrasena_Usuario === password.value
-  );
+    const data = await response.json();
+    console.log('Login successful:', data);
+    
+    // Aquí puedes almacenar el token si usas autenticación basada en tokens
+    // localStorage.setItem('token', data.token);
 
-  if (user) {
-    console.log('Login successful');
-    login(); 
+    // Redirigir al usuario después de iniciar sesión
+    console.log('Redirigiendo a la página de inicio');
+    login();
     router.push('/'); 
-  } else {
-    console.log('Invalid credentials');
+  } catch (error) {
+    console.error('Error en el login:', error);
     alert('Usuario o contraseña incorrecta');
   }
 };
 
+
 const goToRegister = () => {
-  console.log('Navigating to register');
   router.push({ name: 'registrar' });
 };
-
-onMounted(fetchUsers);
 </script>
 
 <style scoped>
