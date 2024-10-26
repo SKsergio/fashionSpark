@@ -269,6 +269,7 @@
     align-items: center;
     width: 50%;
     background: rgb(126, 153, 133);
+    height: 500px;
 }
 .buttons{
     display: flex;
@@ -284,6 +285,30 @@
     cursor: pointer;
     border-radius: 10px;
     background: rgb(25, 139, 105);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.color {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.buttons_colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.btn:hover, .btn_color:hover {
+  background-color: #0056b3;
 }
 .color{
     display: flex;

@@ -9,25 +9,22 @@ export default createStore({
     },
     prendas:[
       {
-        id: 1,
-        tipo: "Camiseta",
-        icono:"https://img.freepik.com/vector-gratis/ilustracion-contorno-camiseta-dibujada-mano_23-2150927674.jpg"
-      },
-      {
         id: 2,
         tipo: "Vestido",
+        link: "vestido",
         imagen:
         "https://previews.123rf.com/images/jelisua88/jelisua882112/jelisua88211200098/178589280-vestido-de-mujer-dibujo-t%C3%A9cnico-vestido-rom%C3%A1ntico-de-lunares-aislado-en-un-fondo-blanco-ropa-de.jpg",
       },
       {
         id: 3,
         tipo: "Chaqueta",
+        link: "sueter",
         imagen:
-          "https://caterpillarsv.com/cdn/shop/files/Ropa_0035_2310632_12887_Black-Stone_ad4e000f-e0bc-4c7f-8e0e-05f4530ed2e3_460x@2x.jpg?v=1709141599",
+          "https://w7.pngwing.com/pngs/831/589/png-transparent-t-shirt-sleeve-jacket-logo-t-shirt-tshirt-white-logo.png",
       },
       {
         id: 4,
-        tipo: "CamisaMujer",
+        tipo: "Camisa de Mujer",
         imagen:
           "https://img.freepik.com/vector-gratis/ilustracion-contorno-camiseta-dibujada-mano_23-2150927674.jpg",
       },
